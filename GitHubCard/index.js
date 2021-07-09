@@ -3,6 +3,17 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+import axios from "axios";
+const divCards = document.querySelector("div.cards");
+const dataURL = "https://api.github.com/users/johanna-rodriguez"
+
+function getData(url){
+    axios.get(url)
+    .then(res=>{
+      divCards.appendChild(cardCreator(res))
+      console.log(res)
+    })
+}
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -12,10 +23,18 @@
     Skip to STEP 3.
 */
 
+
+
+
 /*
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+
+
+getData(dataURL)
+
+
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -28,7 +47,17 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
+const followersArray = ['tetondan',
+'dustinmyers',
+'justsml',
+'luishrd',
+'bigknell'];
+followersArray.forEach(user=>{
+  const url = "https://api.github.com/users/" + user
+  getData(url)
+})
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +78,56 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function cardCreator(res){
+  const mainDiv = document.createElement('div')
+  mainDiv.classList.add('card')
+
+  const img = document.createElement('img')
+  img.setAttribute('src',res.data.avatar_url)
+  mainDiv.appendChild(img);
+
+  const divCardInfo = document.createElement('div')
+  divCardInfo.classList.add('card-info')
+  mainDiv.appendChild(divCardInfo);
+
+  const name = document.createElement('h3')
+  name.classList.add('name')
+  name.textContent = res.data.name
+  divCardInfo.appendChild(name)
+
+  const username = document.createElement('p')
+  username.classList.add('username')
+  username.textContent = res.data.login
+  divCardInfo.appendChild(username)
+
+  const location = document.createElement('p')
+  location.textContent = 'Location: ' + res.data.location
+  divCardInfo.appendChild(location)
+
+  const profile = document.createElement('p')
+  profile.textContent = 'Profile: '
+  divCardInfo.appendChild(profile)
+  
+  const profileAnchor = document.createElement('a')
+  profileAnchor.setAttribute('href',res.data.html_url)
+  profileAnchor.textContent = res.data.html_url
+  profile.appendChild(profileAnchor)
+
+  const followers = document.createElement('p')
+  followers.textContent = 'Followers: ' + res.data.followers
+  divCardInfo.appendChild(followers)
+
+  const following = document.createElement('p')
+  following.textContent = 'Following: ' + res.data.following
+  divCardInfo.appendChild(following)
+
+  const bio = document.createElement('p')
+  bio.textContent = 'Bio: ' + res.data.bio
+  divCardInfo.appendChild(bio)
+
+  return mainDiv
+}
 
 /*
   List of LS Instructors Github username's:
